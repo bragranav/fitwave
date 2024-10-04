@@ -1,1 +1,19 @@
+header{
+    display: flex;
+    align-content: space-around;
+    flex-direction: row;
+    background-color: antiquewhite;
+}
+
+div li{
+    display: flex;
+    text-decoration-style: none;
+    align-content: space-between;
+
+}
+
+div ul{
+display: flex;
+align-content: space-between;
+}
 
