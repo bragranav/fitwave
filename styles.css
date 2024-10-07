@@ -5,15 +5,16 @@ header{
     background-color: antiquewhite;
 }
 
-div li{
-    display: flex;
-    text-decoration-style: none;
-    align-content: space-between;
-
+.head ul{
+display: inline-block;
+align-content: space-around;
 }
 
-div ul{
-display: flex;
-align-content: space-between;
+#list li{
+    display: inline-block;
+    text-decoration-style: none;
+    align-items: space-between;
+    
+
 }
 
