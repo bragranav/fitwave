@@ -1,28 +1,4 @@
 // Manejo de formularios
-/*.getElementById("loginForm")?.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-
-    const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-    });
-
-    const message = document.getElementById("message");
-    if (response.ok) {
-        message.textContent = "Inicio de sesión exitoso.";
-        message.style.color = "green";
-    } else {
-        message.textContent = "Usuario o contraseña incorrectos.";
-        message.style.color = "red";
-    }
-});*/
-
-//////////////////////////////////////////////////////////////////////////
-
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
     e.preventDefault();
 
