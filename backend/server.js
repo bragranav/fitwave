@@ -1,4 +1,68 @@
-require('dotenv').config();
+import mysql from 'mysql2';
+import bcrypt from 'bcrypt';
+
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
+
+export default async function handler(req, res) {
+    if (req.method === 'POST') {
+        const { username, password } = req.body;
+
+        const query = 'SELECT * FROM users WHERE username = ?';
+        db.query(query, [username], async (err, results) => {
+            if (err) {
+                res.status(500).json({ error: 'Error interno del servidor.' });
+                return;
+            }
+
+            if (results.length === 0 || !(await bcrypt.compare(password, results[0].password))) {
+                res.status(400).json({ error: 'Usuario o contraseña incorrectos.' });
+            } else {
+                res.status(200).json({ message: 'Inicio de sesión exitoso.' });
+            }
+        });
+    } else {
+        res.status(405).json({ error: 'Método no permitido.' });
+    }
+}
+
+// api/register.js
+import mysql from 'mysql2';
+import bcrypt from 'bcrypt';
+
+const db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+});
+
+export default async function handler(req, res) {
+    if (req.method === 'POST') {
+        const { username, email, password } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+        db.query(query, [username, email, hashedPassword], (err) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    res.status(400).send('El usuario o el correo ya están registrados.');
+                } else {
+                    res.status(500).send('Error interno del servidor.');
+                }
+            } else {
+                res.status(200).send('Registro exitoso.');
+            }
+        });
+    } else {
+        res.status(405).json({ error: 'Método no permitido.' });
+    }
+}
+/*require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
@@ -83,3 +147,4 @@ app.post('/login', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+*/
